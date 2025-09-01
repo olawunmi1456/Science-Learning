@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Learning Hub - Interactive Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #4a69bd;
+            --physics: #ff6b6b;
+            --chemistry: #48dbfb;
+            --biology: #1dd1a1;
+            --light: #f5f7fa;
+            --dark: #333;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 15px 0;
+            color: var(--secondary);
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        /* Navigation */
+        nav {
+            background-color: #fff;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            list-style-type: none;
+            justify-content: center;
+        }
+        
+        .tabs li {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .tabs button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .tabs button:hover {
+            background-color: #f1f3f6;
+        }
+        
+        .tabs button.active {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        /* Content Sections */
+        .content-section {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Subject Cards */
+        .subject-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .physics .card-header {
+            background: linear-gradient(135deg, var(--physics), #c0392b);
+        }
+        
+        .chemistry .card-header {
+            background: linear-gradient(135deg, var(--chemistry), #2980b9);
+        }
+        
+        .biology .card-header {
+            background: linear-gradient(135deg, var(--biology), var(--success));
+        }
+        
+        .card-body {
+            padding: 15px;
+        }
+        
+        /* Video Resources */
+        .video-section {
+            margin: 30px 0;
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .video-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 15px;
+        }
+        
+        .video-info h4 {
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .video-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Enhanced Quiz Styles */
+        .quiz-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .quiz-progress {
+            background-color: #e9ecef;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .question {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .options label {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .options label:hover {
+            background-color: #dee2e6;
+        }
+        
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Timer */
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .timer.warning {
+            color: var(--warning);
+        }
+        
+        .timer.danger {
+            color: var(--danger);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Quiz Results */
+        .quiz-results {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: var(--primary);
+        }
+        
+        .score-comment {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .review-container {
+            text-align: left;
+            margin-top: 20px;
+        }
+        
+        .review-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+        
+        /* Flashcards */
+        .flashcards-container {
+            margin: 30px 0;
+        }
+        
+        .flashcard {
+            perspective: 1000px;
+            height: 200px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .flashcard-back {
+            background-color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        /* Interactive Simulations */
+        .simulation-container {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: white;
+        }
+        
+        .simulation-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        /* Auth Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-error {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* User Profile */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .subject-cards, .video-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-buttons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            .quiz-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .user-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn btn-outline" onclick="openLoginModal()">Login</button>
+                <button class="btn btn-primary" onclick="openRegisterModal()">Register</button>
+            </div>
+            <div class="user-profile" id="userProfile" style="display: none;">
+                <div class="user-avatar" id="userAvatar"></div>
+                <div>
+                    <div id="userName"></div>
+                    <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.8rem;" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            <h1>Science Learning Hub</h1>
+            <p>Explore the wonders of Physics, Chemistry, and Biology</p>
+        </div>
+    </header>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="Enter your email">
+                <div class="form-error" id="loginEmailError">Please enter a valid email</div>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+                <div class="form-error" id="loginPasswordError">Please enter your password</div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">Login</button>
+            <p style="text-align: center; margin-top: 15px;">
+                Don't have an account? <a href="#" onclick="switchToRegister()">Register now</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Register</h2>
+                <button class="close-btn" onclick="closeRegisterModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="registerName">Full Name</label>
+                <input type="text" id="registerName" placeholder="Enter your full name">
+                <div class="form-error" id="registerNameError">Please enter your name</div>
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email">
+                <div class="form-error" id="registerEmailError">Please enter a valid email</div>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="Create a password">
+                <div class="form-error" id="registerPasswordError">Password must be at least 6 characters</div>
+            </div>
+            <div class="form-group">
+                <label for="registerConfirmPassword">Confirm Password</label>
+                <input type="password" id="registerConfirmPassword" placeholder="Confirm your password">
+                <div class="form-error" id="registerConfirmPasswordError">Passwords do not match</div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="register()">Register</button>
+            <p style="text-align: center; margin-top: 15px;">
+                Already have an account? <a href="#" onclick="switchToLogin()">Login now</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <nav>
+            <ul class="tabs">
+                <li><button class="tab-button active" data-tab="home">Home</button></li>
+                <li><button class="tab-button" data-tab="physics">Physics</button></li>
+                <li><button class="tab-button" data-tab="chemistry">Chemistry</button></li>
+                <li><button class="tab-button" data-tab="biology">Biology</button></li>
+            </ul>
+        </nav>
+
+        <!-- Home Section -->
+        <section id="home" class="content-section active">
+            <h2>Welcome to Science Learning Hub!</h2>
+            <p>This platform is designed to help secondary school students learn fundamental concepts in physics, chemistry, and biology in an engaging and interactive way.</p>
+            
+            <div class="subject-cards">
+                <div class="card physics">
+                    <div class="card-header">Physics</div>
+                    <div class="card-body">
+                        <p>Discover the laws that govern motion, energy, and the universe.</p>
+                        <button class="btn btn-primary tab-button" data-tab="physics">Explore Physics</button>
+                    </div>
+                </div>
+                
+                <div class="card chemistry">
+                    <div class="card-header">Chemistry</div>
+                    <div class="card-body">
+                        <p>Explore the composition, properties, and changes of matter.</p>
+                        <button class="btn btn-primary tab-button" data-tab="chemistry">Explore Chemistry</button>
+                    </div>
+                </div>
+                
+                <div class="card biology">
+                    <div class="card-header">Biology</div>
+                    <div class="card-body">
+                        <p>Learn about living organisms and their interactions with the environment.</p>
+                        <button class="btn btn-primary tab-button" data-tab="biology">Explore Biology</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-section">
+                <h2>Featured Videos</h2>
+                <div class="video-gallery">
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/Y-NQOJ3Uz4w" title="Introduction to Physics" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Introduction to Physics</h4>
+                            <p>Learn about the fundamental laws of motion and energy</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/FSyAehMdpyI" title="Chemical Reactions" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Chemical Reactions Explained</h4>
+                            <p>Understand how substances interact and form new compounds</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/0JDCViWGn-0" title="Human Body Systems" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Human Body Systems</h4>
+                            <p>Explore how our body functions and systems work together</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Physics Section -->
+        <section id="physics" class="content-section">
+            <h2>Physics</h2>
+            <p>Physics is the study of matter, energy, and the fundamental forces of nature. It helps us understand how the universe behaves, from the smallest subatomic particles to the largest galaxies.</p>
+            
+            <div class="video-section">
+                <h3>Physics Videos</h3>
+                <div class="video-gallery">
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/kKKM8Y-u7ds" title="Newton's Laws of Motion" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Newton's Laws of Motion</h4>
+                            <p>Understanding the three fundamental laws that govern motion</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/PKm4ZVNmJyQ" title="Energy Transformation" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Energy Transformation</h4>
+                            <p>How energy changes from one form to another</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/mc979OhitAg" title="Electricity Basics" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Electricity Basics</h4>
+                            <p>Introduction to electrical circuits and components</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Physics Flashcards -->
+            <div class="flashcards-container">
+                <h3>Physics Flashcards</h3>
+                <div class="flashcard" id="physics-flashcard">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <p>What is Newton's First Law of Motion?</p>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>An object at rest stays at rest and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="btn btn-outline" onclick="prevFlashcard('physics')">Previous</button>
+                    <button class="btn btn-primary" onclick="flipFlashcard('physics')">Flip Card</button>
+                    <button class="btn btn-outline" onclick="nextFlashcard('physics')">Next</button>
+                </div>
+            </div>
+            
+            <!-- Physics Quiz -->
+            <div class="quiz-container" id="physics-quiz">
+                <div class="quiz-header">
+                    <h3>Test Your Knowledge: Physics</h3>
+                    <div class="timer" id="physics-timer">10:00</div>
+                </div>
+                <div class="quiz-progress">
+                    <div class="progress-bar" id="physics-progress"></div>
+                </div>
+                
+                <div id="physics-questions">
+                    <!-- Questions will be inserted by JavaScript -->
+                </div>
+                
+                <div class="quiz-controls">
+                    <button class="btn btn-outline" id="physics-prev">Previous</button>
+                    <button class="btn btn-primary" id="physics-next">Next</button>
+                    <button class="btn btn-primary" id="physics-submit">Submit Quiz</button>
+                </div>
+                
+                <div id="physics-result" class="result"></div>
+            </div>
+        </section>
+
+        <!-- Chemistry Section -->
+        <section id="chemistry" class="content-section">
+            <h2>Chemistry</h2>
+            <p>Chemistry is the study of matter, its properties, how and why substances combine or separate to form other substances, and how substances interact with energy. Everything around us is made of chemicals!</p>
+            
+            <div class="video-section">
+                <h3>Chemistry Videos</h3>
+                <div class="video-gallery">
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/TYEYEIuTmGQ" title="Atomic Structure" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Atomic Structure</h4>
+                            <p>Learn about protons, neutrons, and electrons</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/84780SzjGt0" title="Periodic Table" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>The Periodic Table</h4>
+                            <p>Understanding how elements are organized</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/2S6e11NBwiw" title="Chemical Bonds" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Chemical Bonds</h4>
+                            <p>How atoms connect to form molecules and compounds</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chemistry Interactive Simulation -->
+            <div class="simulation-container">
+                <h3>Periodic Table Explorer</h3>
+                <p>Select an element to learn more about it:</p>
+                <div class="simulation-controls">
+                    <select id="element-selector" class="btn">
+                        <option value="h">Hydrogen (H)</option>
+                        <option value="he">Helium (He)</option>
+                        <option value="li">Lithium (Li)</option>
+                        <option value="o">Oxygen (O)</option>
+                        <option value="na">Sodium (Na)</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="showElementInfo()">Show Info</button>
+                </div>
+                <div id="element-info"></div>
+            </div>
+            
+            <!-- Chemistry Quiz -->
+            <div class="quiz-container" id="chemistry-quiz">
+                <div class="quiz-header">
+                    <h3>Test Your Knowledge: Chemistry</h3>
+                    <div class="timer" id="chemistry-timer">10:00</div>
+                </div>
+                <div class="quiz-progress">
+                    <div class="progress-bar" id="chemistry-progress"></div>
+                </div>
+                
+                <div id="chemistry-questions">
+                    <!-- Questions will be inserted by JavaScript -->
+                </div>
+                
+                <div class="quiz-controls">
+                    <button class="btn btn-outline" id="chemistry-prev">Previous</button>
+                    <button class="btn btn-primary" id="chemistry-next">Next</button>
+                    <button class="btn btn-primary" id="chemistry-submit">Submit Quiz</button>
+                </div>
+                
+                <div id="chemistry-result" class="result"></div>
+            </div>
+        </section>
+
+        <!-- Biology Section -->
+        <section id="biology" class="content-section">
+            <h2>Biology</h2>
+            <p>Biology is the study of living organisms and their interactions with each other and their environments. It encompasses everything from the molecular biology of cells to the complex interactions of ecosystems.</p>
+            
+            <div class="video-section">
+                <h3>Biology Videos</h3>
+                <div class="video-gallery">
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/8IlzKri08kk" title="Cell Structure" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Cell Structure</h4>
+                            <p>Exploring the building blocks of life</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/CMiPYHNNg28" title="Photosynthesis" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Photosynthesis</h4>
+                            <p>How plants convert sunlight into energy</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/Og5xAdC8EUI" title="Human Digestive System" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <h4>Human Digestive System</h4>
+                            <p>Understanding how our body processes food</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Biology Flashcards -->
+            <div class="flashcards-container">
+                <h3>Biology Flashcards</h3>
+                <div class="flashcard" id="biology-flashcard">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <p>What is the powerhouse of the cell?</p>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>The mitochondria is known as the powerhouse of the cell because it produces energy (ATP) through cellular respiration.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="btn btn-outline" onclick="prevFlashcard('biology')">Previous</button>
+                    <button class="btn btn-primary" onclick="flipFlashcard('biology')">Flip Card</button>
+                    <button class="btn btn-outline" onclick="nextFlashcard('biology')">Next</button>
+                </div>
+            </div>
+            
+            <!-- Biology Quiz -->
+            <div class="quiz-container" id="biology-quiz">
+                <div class="quiz-header">
+                    <h3>Test Your Knowledge: Biology</h3>
+                    <div class="timer" id="biology-timer">10:00</div>
+                </div>
+                <div class="quiz-progress">
+                    <div class="progress-bar" id="biology-progress"></div>
+                </div>
+                
+                <div id="biology-questions">
+                    <!-- Questions will be inserted by JavaScript -->
+                </div>
+                
+                <div class="quiz-controls">
+                    <button class="btn btn-outline" id="biology-prev">Previous</button>
+                    <button class="btn btn-primary" id="biology-next">Next</button>
+                    <button class="btn btn-primary" id="biology-submit">Submit Quiz</button>
+                </div>
+                
+                <div id="biology-result" class="result"></div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Science Learning Hub &copy; 2023 | Designed for Secondary School Students</p>
+        </div>
+    </footer>
+
+    <script>
+        // User authentication system
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('scienceHubUsers')) || [];
+        
+        // Check if user is already logged in
+        function checkLoginStatus() {
+            const loggedInUser = JSON.parse(localStorage.getItem('scienceHubCurrentUser'));
+            if (loggedInUser) {
+                currentUser = loggedInUser;
+                updateUIForLoggedInUser();
+            }
+        }
+        
+        // Update UI when user logs in
+        function updateUIForLoggedInUser() {
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'flex';
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+        }
+        
+        // Update UI when user logs out
+        function updateUIForLoggedOutUser() {
+            document.getElementById('authButtons').style.display = 'flex';
+            document.getElementById('userProfile').style.display = 'none';
+        }
+        
+        // Open login modal
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+        
+        // Close login modal
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            clearFormErrors('login');
+        }
+        
+        // Open register modal
+        function openRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+        
+        // Close register modal
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+            clearFormErrors('register');
+        }
+        
+        // Switch to register form
+        function switchToRegister() {
+            closeLoginModal();
+            openRegisterModal();
+        }
+        
+        // Switch to login form
+        function switchToLogin() {
+            closeRegisterModal();
+            openLoginModal();
+        }
+        
+        // Clear form errors
+        function clearFormErrors(formType) {
+            const errors = document.querySelectorAll(`#${formType}Modal .form-error`);
+            errors.forEach(error => {
+                error.style.display = 'none';
+            });
+        }
+        
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // Login function
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            let isValid = true;
+            
+            // Validate inputs
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('loginEmailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password) {
+                document.getElementById('loginPasswordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Check if user exists
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('scienceHubCurrentUser', JSON.stringify(user));
+                updateUIForLoggedInUser();
+                closeLoginModal();
+                
+                // Clear login form
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            } else {
+                alert('Invalid email or password. Please try again.');
+            }
+        }
+        
+        // Register function
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            let isValid = true;
+            
+            // Validate inputs
+            if (!name) {
+                document.getElementById('registerNameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('registerEmailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password || password.length < 6) {
+                document.getElementById('registerPasswordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (password !== confirmPassword) {
+                document.getElementById('registerConfirmPasswordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Check if user already exists
+            if (users.some(u => u.email === email)) {
+                alert('User with this email already exists. Please login instead.');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password,
+                joinDate: new Date().toISOString(),
+                quizScores: {}
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('scienceHubUsers', JSON.stringify(users));
+            
+            currentUser = newUser;
+            localStorage.setItem('scienceHubCurrentUser', JSON.stringify(newUser));
+            updateUIForLoggedInUser();
+            closeRegisterModal();
+            
+            // Clear registration form
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+            
+            alert('Registration successful! Welcome to Science Learning Hub.');
+        }
+        
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('scienceHubCurrentUser');
+            updateUIForLoggedOutUser();
+        }
+        
+        // Quiz Data
+        const quizData = {
+            physics: {
+                questions: [
+                    {
+                        question: "What does Newton's First Law of Motion state?",
+                        options: [
+                            "F = ma",
+                            "For every action, there is an equal and opposite reaction",
+                            "An object at rest stays at rest unless acted upon by a force"
+                        ],
+                        answer: 2
+                    },
+                    {
+                        question: "Which of these is a unit of force?",
+                        options: [
+                            "Joule",
+                            "Newton",
+                            "Watt"
+                        ],
+                        answer: 1
+                    },
+                    {
+                        question: "What is the formula for calculating kinetic energy?",
+                        options: [
+                            "KE = ½mv²",
+                            "KE = mgh",
+                            "KE = Fd"
+                        ],
+                        answer: 0
+                    },
+                    {
+                        question: "Which law of thermodynamics states that energy cannot be created or destroyed?",
+                        options: [
+                            "Zeroth Law",
+                            "First Law",
+                            "Second Law"
+                        ],
+                        answer: 1
+                    },
+                    {
+                        question: "What is the speed of light in a vacuum?",
+                        options: [
+                            "299,792,458 m/s",
+                            "150,000,000 m/s",
+                            "450,000,000 m/s"
+                        ],
+                        answer: 0
+                    }
+                ],
+                currentQuestion: 0,
+                userAnswers: [],
+                timeLimit: 600, // 10 minutes in seconds
+                timeLeft: 600,
+                timerInterval: null
+            },
+            chemistry: {
+                questions: [
+                    {
+                        question: "What are the three main subatomic particles?",
+                        options: [
+                            "Protons, neutrons, and electrons",
+                            "Molecules, compounds, and elements",
+                            "Solids, liquids, and gases"
+                        ],
+                        answer: 0
+                    },
+                    {
+                        question: "What does the atomic number represent?",
+                        options: [
+                            "The number of protons in an atom",
+                            "The total number of protons and neutrons",
+                            "The number of electrons in the outer shell"
+                        ],
+                        answer: 0
+                    },
+                    {
+                        question: "What is the pH of a neutral solution?",
+                        options: [
+                            "0",
+                            "7",
+                            "14"
+                        ],
+                        answer: 1
+                    },
+                    {
+                        question: "Which of these is a noble gas?",
+                        options: [
+                            "Oxygen",
+                            "Nitrogen",
+                            "Helium"
+                        ],
+                        answer: 2
+                    },
+                    {
+                        question: "What type of bond involves the sharing of electrons?",
+                        options: [
+                            "Ionic bond",
+                            "Covalent bond",
+                            "Metallic bond"
+                        ],
+                        answer: 1
+                    }
+                ],
+                currentQuestion: 0,
+                userAnswers: [],
+                timeLimit: 600,
+                timeLeft: 600,
+                timerInterval: null
+            },
+            biology: {
+                questions: [
+                    {
+                        question: "Which organelle is known as the 'powerhouse' of the cell?",
+                        options: [
+                            "Nucleus",
+                            "Mitochondria",
+                            "Chloroplast"
+                        ],
+                        answer: 1
+                    },
+                    {
+                        question: "What is the primary purpose of photosynthesis?",
+                        options: [
+                            "To produce oxygen for animals to breathe",
+                            "To convert light energy into chemical energy",
+                            "To absorb water from the soil"
+                        ],
+                        answer: 1
+                    },
+                    {
+                        question: "Which of these is not a type of blood cell?",
+                        options: [
+                            "Erythrocyte",
+                            "Leukocyte",
+                            "Osteocyte"
+                        ],
+                        answer: 2
+                    },
+                    {
+                        question: "What is the basic unit of heredity?",
+                        options: [
+                            "Chromosome",
+                            "Gene",
+                            "Protein"
+                        ],
+                        answer: 1
+                    },
+                    {
+                        question: "Which system is responsible for producing hormones?",
+                        options: [
+                            "Nervous system",
+                            "Endocrine system",
+                            "Digestive system"
+                        ],
+                        answer: 1
+                    }
+                ],
+                currentQuestion: 0,
+                userAnswers: [],
+                timeLimit: 600,
+                timeLeft: 600,
+                timerInterval: null
+            }
+        };
+
+        // Element information for chemistry simulation
+        const elementData = {
+            h: {
+                name: "Hydrogen",
+                symbol: "H",
+                atomicNumber: 1,
+                atomicMass: "1.008",
+                category: "Non-metal",
+                description: "Hydrogen is the lightest and most abundant element in the universe. It is a colorless, odorless, tasteless gas that is highly flammable."
+            },
+            he: {
+                name: "Helium",
+                symbol: "He",
+                atomicNumber: 2,
+                atomicMass: "4.0026",
+                category: "Noble Gas",
+                description: "Helium is a colorless, odorless, tasteless, non-toxic, inert monatomic gas. It has the lowest boiling point of all the elements."
+            },
+            li: {
+                name: "Lithium",
+                symbol: "Li",
+                atomicNumber: 3,
+                atomicMass: "6.94",
+                category: "Alkali Metal",
+                description: "Lithium is a soft, silver-white metal that belongs to the alkali metal group. It is the lightest metal and the lightest solid element."
+            },
+            o: {
+                name: "Oxygen",
+                symbol: "O",
+                atomicNumber: 8,
+                atomicMass: "16.00",
+                category: "Non-metal",
+                description: "Oxygen is a highly reactive nonmetal and oxidizing agent that readily forms compounds with most elements. It is essential for respiration."
+            },
+            na: {
+                name: "Sodium",
+                symbol: "Na",
+                atomicNumber: 11,
+                atomicMass: "22.99",
+                category: "Alkali Metal",
+                description: "Sodium is a soft, silvery-white, highly reactive metal. It is an essential element for all animals and some plants."
+            }
+        };
+
+        // Flashcard data
+        const flashcardData = {
+            physics: [
+                {
+                    front: "What is Newton's First Law of Motion?",
+                    back: "An object at rest stays at rest and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force."
+                },
+                {
+                    front: "What is the formula for force?",
+                    back: "Force = mass × acceleration (F = ma)"
+                },
+                {
+                    front: "What is the law of conservation of energy?",
+                    back: "Energy cannot be created or destroyed, only transformed from one form to another."
+                }
+            ],
+            biology: [
+                {
+                    front: "What is the powerhouse of the cell?",
+                    back: "The mitochondria is known as the powerhouse of the cell because it produces energy (ATP) through cellular respiration."
+                },
+                {
+                    front: "What is photosynthesis?",
+                    back: "Photosynthesis is the process by which plants use sunlight, water, and carbon dioxide to create oxygen and energy in the form of sugar."
+                },
+                {
+                    front: "What is DNA?",
+                    back: "DNA (Deoxyribonucleic acid) is a molecule that carries most of the genetic instructions used in the development, functioning and reproduction of all known living organisms."
+                }
+            ]
+        };
+
+        // Flashcard indices
+        let flashcardIndices = {
+            physics: 0,
+            biology: 0
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTabs();
+            initializeQuizzes();
+            initializeFlashcards();
+            checkLoginStatus();
+        });
+
+        // Tab navigation functionality
+        function initializeTabs() {
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tab = button.dataset.tab;
+                    
+                    // Update active tab button
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    button.classList.add('active');
+                    
+                    // Show active content section
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(tab).classList.add('active');
+                });
+            });
+        }
+
+        // Initialize quizzes
+        function initializeQuizzes() {
+            // Initialize all quizzes
+            for (const subject in quizData) {
+                if (quizData.hasOwnProperty(subject)) {
+                    loadQuizQuestions(subject);
+                    setupQuizNavigation(subject);
+                    resetQuizTimer(subject);
+                }
+            }
+        }
+
+        // Load quiz questions into the DOM
+        function loadQuizQuestions(subject) {
+            const questionsContainer = document.getElementById(`${subject}-questions`);
+            questionsContainer.innerHTML = '';
+            
+            quizData[subject].questions.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.innerHTML = `
+                    <div class="question">${index + 1}. ${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((option, optIndex) => `
+                            <label>
+                                <input type="radio" name="${subject}-q${index}" value="${optIndex}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                
+                // Hide all questions except the first one
+                if (index !== 0) {
+                    questionElement.style.display = 'none';
+                }
+                
+                questionsContainer.appendChild(questionElement);
+            });
+            
+            // Update progress bar
+            updateProgressBar(subject);
+        }
+
+        // Set up quiz navigation
+        function setupQuizNavigation(subject) {
+            const prevButton = document.getElementById(`${subject}-prev`);
+            const nextButton = document.getElementById(`${subject}-next`);
+            const submitButton = document.getElementById(`${subject}-submit`);
+            
+            prevButton.addEventListener('click', () => navigateQuiz(subject, -1));
+            nextButton.addEventListener('click', () => navigateQuiz(subject, 1));
+            submitButton.addEventListener('click', () => submitQuiz(subject));
+            
+            // Initially disable previous button
+            prevButton.disabled = true;
+        }
+
+        // Navigate between quiz questions
+        function navigateQuiz(subject, direction) {
+            const current = quizData[subject].currentQuestion;
+            const total = quizData[subject].questions.length;
+            
+            // Save answer if selected
+            const selectedOption = document.querySelector(`input[name="${subject}-q${current}"]:checked`);
+            if (selectedOption) {
+                quizData[subject].userAnswers[current] = parseInt(selectedOption.value);
+            }
+            
+            // Hide current question
+            document.querySelectorAll(`#${subject}-questions > div`)[current].style.display = 'none';
+            
+            // Update current question index
+            quizData[subject].currentQuestion += direction;
+            
+            // Show new current question
+            document.querySelectorAll(`#${subject}-questions > div`)[quizData[subject].currentQuestion].style.display = 'block';
+            
+            // Update navigation buttons
+            const prevButton = document.getElementById(`${subject}-prev`);
+            const nextButton = document.getElementById(`${subject}-next`);
+            const submitButton = document.getElementById(`${subject}-submit`);
+            
+            prevButton.disabled = quizData[subject].currentQuestion === 0;
+            
+            if (quizData[subject].currentQuestion === total - 1) {
+                nextButton.style.display = 'none';
+                submitButton.style.display = 'block';
+            } else {
+                nextButton.style.display = 'block';
+                submitButton.style.display = 'none';
+            }
+            
+            // Update progress bar
+            updateProgressBar(subject);
+            
+            // Pre-select previously selected answer if exists
+            if (quizData[subject].userAnswers[quizData[subject].currentQuestion] !== undefined) {
+                const radioButton = document.querySelector(`input[name="${subject}-q${quizData[subject].currentQuestion}"][value="${quizData[subject].userAnswers[quizData[subject].currentQuestion]}"]`);
+                if (radioButton) {
+                    radioButton.checked = true;
+                }
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar(subject) {
+            const progress = ((quizData[subject].currentQuestion + 1) / quizData[subject].questions.length) * 100;
+            document.getElementById(`${subject}-progress`).style.width = `${progress}%`;
+        }
+
+        // Submit quiz and show results
+        function submitQuiz(subject) {
+            // Save answer for current question
+            const current = quizData[subject].currentQuestion;
+            const selectedOption = document.querySelector(`input[name="${subject}-q${current}"]:checked`);
+            if (selectedOption) {
+                quizData[subject].userAnswers[current] = parseInt(selectedOption.value);
+            }
+            
+            // Calculate score
+            let score = 0;
+            quizData[subject].questions.forEach((q, index) => {
+                if (quizData[subject].userAnswers[index] === q.answer) {
+                    score++;
+                }
+            });
+            
+            // Stop timer
+            clearInterval(quizData[subject].timerInterval);
+            
+            // Save score if user is logged in
+            if (currentUser) {
+                if (!currentUser.quizScores) currentUser.quizScores = {};
+                if (!currentUser.quizScores[subject]) currentUser.quizScores[subject] = [];
+                
+                currentUser.quizScores[subject].push({
+                    score: score,
+                    total: quizData[subject].questions.length,
+                    date: new Date().toISOString()
+                });
+                
+                // Update user data in storage
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('scienceHubUsers', JSON.stringify(users));
+                    localStorage.setItem('scienceHubCurrentUser', JSON.stringify(currentUser));
+                }
+            }
+            
+            // Display results
+            const resultElement = document.getElementById(`${subject}-result`);
+            resultElement.innerHTML = `
+                <div class="quiz-results">
+                    <h3>Quiz Results</h3>
+                    <div class="score-display">${score} / ${quizData[subject].questions.length}</div>
+                    <div class="score-comment">${getScoreComment(score, quizData[subject].questions.length)}</div>
+                    <button class="btn btn-primary" onclick="resetQuiz('${subject}')">Try Again</button>
+                </div>
+                <div class="review-container">
+                    <h4>Review your answers:</h4>
+                    ${quizData[subject].questions.map((q, index) => {
+                        const userAnswer = quizData[subject].userAnswers[index];
+                        const isCorrect = userAnswer === q.answer;
+                        return `
+                            <div class="review-item ${isCorrect ? 'correct' : 'incorrect'}">
+                                <p><strong>Question ${index + 1}:</strong> ${q.question}</p>
+                                <p>Your answer: ${userAnswer !== undefined ? q.options[userAnswer] : 'Not answered'}</p>
+                                ${!isCorrect ? `<p>Correct answer: ${q.options[q.answer]}</p>` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            resultElement.className = 'result';
+            
+            // Hide quiz controls
+            document.querySelector(`#${subject}-quiz .quiz-controls`).style.display = 'none';
+        }
+
+        // Get comment based on score
+        function getScoreComment(score, total) {
+            const percentage = (score / total) * 100;
+            if (percentage >= 90) return "Excellent work! You've mastered this subject!";
+            if (percentage >= 70) return "Good job! You have a solid understanding.";
+            if (percentage >= 50) return "Not bad! Keep studying to improve.";
+            return "Keep practicing! You'll get better with more study.";
+        }
+
+        // Reset quiz to initial state
+        function resetQuiz(subject) {
+            quizData[subject].currentQuestion = 0;
+            quizData[subject].userAnswers = [];
+            resetQuizTimer(subject);
+            loadQuizQuestions(subject);
+            
+            // Reset navigation buttons
+            document.getElementById(`${subject}-prev`).disabled = true;
+            document.getElementById(`${subject}-next`).style.display = 'block';
+            document.getElementById(`${subject}-submit`).style.display = 'none';
+            
+            // Show quiz controls
+            document.querySelector(`#${subject}-quiz .quiz-controls`).style.display = 'flex';
+            
+            // Clear results
+            document.getElementById(`${subject}-result`).innerHTML = '';
+            document.getElementById(`${subject}-result`).className = 'result';
+        }
+
+        // Timer functions
+        function resetQuizTimer(subject) {
+            // Clear existing timer if any
+            if (quizData[subject].timerInterval) {
+                clearInterval(quizData[subject].timerInterval);
+            }
+            
+            // Reset time
+            quizData[subject].timeLeft = quizData[subject].timeLimit;
+            updateTimerDisplay(subject);
+            
+            // Start new timer
+            quizData[subject].timerInterval = setInterval(() => {
+                quizData[subject].timeLeft--;
+                updateTimerDisplay(subject);
+                
+                if (quizData[subject].timeLeft <= 0) {
+                    clearInterval(quizData[subject].timerInterval);
+                    submitQuiz(subject);
+                    alert("Time's up! Your quiz has been submitted.");
+                }
+            }, 1000);
+        }
+
+        // Update timer display
+        function updateTimerDisplay(subject) {
+            const minutes = Math.floor(quizData[subject].timeLeft / 60);
+            const seconds = quizData[subject].timeLeft % 60;
+            const timerElement = document.getElementById(`${subject}-timer`);
+            
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change color when time is running out
+            if (quizData[subject].timeLeft <= 60) {
+                timerElement.className = 'timer danger';
+            } else if (quizData[subject].timeLeft <= 120) {
+                timerElement.className = 'timer warning';
+            } else {
+                timerElement.className = 'timer';
+            }
+        }
+
+        // Initialize flashcards
+        function initializeFlashcards() {
+            // Initialize flashcard indices
+            flashcardIndices = {
+                physics: 0,
+                biology: 0
+            };
+        }
+
+        // Flip flashcard
+        function flipFlashcard(subject) {
+            const flashcard = document.getElementById(`${subject}-flashcard`);
+            flashcard.classList.toggle('flipped');
+        }
+
+        // Navigate to next flashcard
+        function nextFlashcard(subject) {
+            if (!flashcardIndices[subject]) flashcardIndices[subject] = 0;
+            
+            flashcardIndices[subject] = (flashcardIndices[subject] + 1) % flashcardData[subject].length;
+            updateFlashcard(subject);
+        }
+
+        // Navigate to previous flashcard
+        function prevFlashcard(subject) {
+            if (!flashcardIndices[subject]) flashcardIndices[subject] = 0;
+            
+            flashcardIndices[subject] = (flashcardIndices[subject] - 1 + flashcardData[subject].length) % flashcardData[subject].length;
+            updateFlashcard(subject);
+        }
+
+        // Update flashcard content
+        function updateFlashcard(subject) {
+            const index = flashcardIndices[subject];
+            const flashcard = document.getElementById(`${subject}-flashcard`);
+            
+            // Reset flip state
+            flashcard.classList.remove('flipped');
+            
+            // Update content
+            const frontElement = flashcard.querySelector('.flashcard-front p');
+            const backElement = flashcard.querySelector('.flashcard-back p');
+            
+            frontElement.textContent = flashcardData[subject][index].front;
+            backElement.textContent = flashcardData[subject][index].back;
+        }
+
+        // Chemistry simulation function
+        function showElementInfo() {
+            const elementKey = document.getElementById('element-selector').value;
+            const element = elementData[elementKey];
+            const infoContainer = document.getElementById('element-info');
+            
+            infoContainer.innerHTML = `
+                <h4>${element.name} (${element.symbol})</h4>
+                <p><strong>Atomic Number:</strong> ${element.atomicNumber}</p>
+                <p><strong>Atomic Mass:</strong> ${element.atomicMass}</p>
+                <p><strong>Category:</strong> ${element.category}</p>
+                <p>${element.description}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
